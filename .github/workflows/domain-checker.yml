@@ -22,55 +22,37 @@ jobs:
 
       - name: Gerekli paketleri yükle
         run: |
-          pip install requests
+          pip install requests cloudscraper
 
       - name: Domainleri kontrol et ve güncelle
-        env:
-          CLOUDFLARE_WORKER_URL: ${{ secrets.CLOUDFLARE_WORKER_URL }}
         run: |
           python - <<'EOF'
           import re
-          import requests
-          import os
-          import time
           from urllib.parse import urlparse
+          from cloudscraper import CloudScraper
 
-          def get_final_url(url, worker_url, timeout=15):
-              """Cloudflare Worker üzerinden URL'nin son redirect edilen halini döndürür"""
+          scraper = CloudScraper()
+
+          def get_final_url(url, timeout=10):
+              """URL'nin son redirect edilen halini döndürür"""
               try:
                   url = url.strip().rstrip('/')
           
-                  # Worker'a istek yap
-                  response = requests.get(
-                      f"{worker_url}?url={url}",
-                      timeout=timeout
+                  response = scraper.get(
+                      url,
+                      allow_redirects=True,
+                      timeout=timeout,
+                      headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
                   )
           
-                  if response.status_code == 200:
-                      data = response.json()
+                  final_url = response.url.rstrip('/')
+                  parsed = urlparse(final_url)
+                  clean_url = f"{parsed.scheme}://{parsed.netloc}"
           
-                      # Hata kontrolü
-                      if 'error' in data:
-                          print(f"    Worker hatası: {data['error']}")
-                          return None
-          
-                      final_url = data.get('final_url', url).rstrip('/')
-          
-                      # URL'yi temizle (sadece domain al)
-                      parsed = urlparse(final_url)
-                      clean_url = f"{parsed.scheme}://{parsed.netloc}"
-          
-                      # Redirect varsa bildir
-                      if data.get('has_redirect'):
-                          print(f"    Redirect tespit edildi: {data.get('redirect_url')}")
-          
-                      return clean_url
-                  else:
-                      print(f"    Worker HTTP hatası: {response.status_code}")
-                      return None
+                  return clean_url
           
               except Exception as e:
-                  print(f"    Hata: {str(e)}")
+                  print(f"Hata ({url}): {str(e)}")
                   return None
 
           def parse_line(line):
@@ -82,37 +64,19 @@ jobs:
                   return name, url
               return None, None
 
-          # Cloudflare Worker URL'ini al
-          worker_url = os.environ.get('CLOUDFLARE_WORKER_URL')
-          
-          if not worker_url:
-              print("❌ HATA: CLOUDFLARE_WORKER_URL secret'ı ayarlanmamış!")
-              print("GitHub repo -> Settings -> Secrets and variables -> Actions -> New repository secret")
-              print("Name: CLOUDFLARE_WORKER_URL")
-              print("Value: https://your-worker.workers.dev")
-              exit(1)
-
-          worker_url = worker_url.rstrip('/')
-          print(f"Worker URL: {worker_url}\n")
-
           file_path = 'eklenti_domainleri.txt'
           
           try:
               with open(file_path, 'r', encoding='utf-8') as f:
                   content = f.read()
           except FileNotFoundError:
-              print(f"❌ Dosya bulunamadı: {file_path}")
+              print(f"Dosya bulunamadı: {file_path}")
               exit(1)
 
           original_content = content
           changes_made = False
-          total_checked = 0
-          total_updated = 0
 
-          print("=" * 60)
-          print("DOMAIN KONTROL BAŞLIYOR (Cloudflare Worker ile)")
-          print("=" * 60)
-          print()
+          print("Domain kontrolleri başlıyor...\n")
 
           lines = content.split('\n')
           
@@ -125,41 +89,32 @@ jobs:
               if not name or not original_url:
                   continue
           
-              total_checked += 1
-              print(f"[{total_checked}] Kontrol ediliyor: {name}")
+              print(f"Kontrol ediliyor: {name}")
               print(f"  Mevcut URL: {original_url}")
           
-              final_url = get_final_url(original_url, worker_url)
-          
-              # Rate limiting için kısa bekleme
-              time.sleep(0.5)
+              final_url = get_final_url(original_url)
           
               if final_url and final_url != original_url:
-                  print(f"  ✅ Yeni URL bulundu: {final_url}")
+                  print(f"  ✓ Yeni URL bulundu: {final_url}")
                   old_line = line
                   new_line = f"|{name}:{final_url}"
                   content = content.replace(old_line, new_line, 1)
                   changes_made = True
-                  total_updated += 1
               else:
                   if final_url:
-                      print(f"  ℹ️  Değişiklik yok")
+                      print(f"  → Değişiklik yok")
                   else:
-                      print(f"  ⚠️  Erişilemedi, mevcut URL korunuyor")
+                      print(f"  ✗ Erişilemedi, mevcut URL korunuyor")
           
               print()
-
-          print("=" * 60)
-          print(f"ÖZET: {total_checked} domain kontrol edildi, {total_updated} güncellendi")
-          print("=" * 60)
 
           # Dosyayı sadece değişiklik varsa güncelle
           if changes_made and content != original_content:
               with open(file_path, 'w', encoding='utf-8') as f:
                   f.write(content)
-              print("✅ Dosya güncellendi!")
+              print("✓ Dosya güncellendi!")
           else:
-              print("ℹ️  Güncelleme gerekmedi.")
+              print("→ Güncelleme gerekmedi.")
 
           EOF
 
@@ -174,7 +129,7 @@ jobs:
             echo "Değişiklik yok, commit atlanıyor"
           else
             git pull --rebase origin main
-            git commit -m "🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M UTC')"
+            git commit -m "🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M')"
             git push
-            echo "✅ Değişiklikler push edildi"
+            echo "✓ Değişiklikler push edildi"
           fi
