@@ -5,15 +5,20 @@ on:
     - cron: '0 * * * *'  # Her saat başı çalışır
   workflow_dispatch:  # Manuel tetikleme için
 
+env:
+  FILE_PATH: eklenti_domainleri.txt
+  BRANCH: main
+
 jobs:
   domain-kontrolu:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Depoyu klonla
+      - name: Depoyu klonla (tam geçmiş)
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0
 
       - name: Python kurulumu
         uses: actions/setup-python@v4
@@ -22,6 +27,7 @@ jobs:
 
       - name: Gerekli paketleri yükle
         run: |
+          python -m pip install --upgrade pip
           pip install requests cloudscraper
 
       - name: Domainleri kontrol et ve güncelle
@@ -64,7 +70,7 @@ jobs:
                   return name, url
               return None, None
 
-          file_path = 'eklenti_domainleri.txt'
+          file_path = '${{ env.FILE_PATH }}'
           
           try:
               with open(file_path, 'r', encoding='utf-8') as f:
@@ -78,7 +84,7 @@ jobs:
 
           print("Domain kontrolleri başlıyor...\n")
 
-          lines = content.split('\n')
+          lines = content.split('\\n')
           
           for i, line in enumerate(lines):
               if not line.strip() or not line.strip().startswith('|'):
@@ -119,17 +125,45 @@ jobs:
           EOF
 
       - name: Değişiklikleri kaydet ve yükle
+        env:
+          BRANCH: ${{ env.BRANCH }}
+          REPO: ${{ github.repository }}
         run: |
-          git config --global user.name 'Domain Kontrol Botu'
-          git config --global user.email 'bot@github-actions'
-          
-          git add eklenti_domainleri.txt
-          
+          set -e
+
+          git config user.name 'Domain Kontrol Botu'
+          git config user.email 'bot@github-actions'
+
+          git add $FILE_PATH || true
+
+          # Eğer staged değişiklik yoksa çık
           if git diff --staged --quiet; then
             echo "Değişiklik yok, commit atlanıyor"
-          else
-            git pull --rebase origin main
-            git commit -m "🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M')"
-            git push
-            echo "✓ Değişiklikler push edildi"
+            exit 0
           fi
+
+          # Rebase ile remote üzerindeki en yeni main'i al ve local commit'leri onun üstüne koy
+          git fetch origin $BRANCH --prune
+          git pull --rebase origin $BRANCH || {
+            echo "git pull --rebase sırasında hata oluştu. Muhtemel çatışma. İşlem iptal ediliyor."
+            git rebase --abort || true
+            exit 1
+          }
+
+          COMMIT_MSG="🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M')"
+          git commit -m "$COMMIT_MSG" || {
+            echo "Commit atılırken hata."
+            git status
+            exit 1
+          }
+
+          # Push yap (PAT ile kimlik doğrulama)
+          echo "Pushing changes..."
+          git push "https://${{ secrets.PAT_TOKEN }}@github.com/${REPO}.git" HEAD:$BRANCH || {
+            echo "Push başarısız oldu. Remote'da yeni commit olabilir. İşlem iptal."
+            git log --oneline -n 5
+            exit 1
+          }
+
+          echo "✓ Değişiklikler push edildi"
+
