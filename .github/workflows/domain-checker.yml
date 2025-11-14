@@ -84,7 +84,7 @@ jobs:
 
           print("Domain kontrolleri başlıyor...\n")
 
-          lines = content.split('\\n')
+          lines = content.splitlines() 
           
           for i, line in enumerate(lines):
               if not line.strip() or not line.strip().startswith('|'):
