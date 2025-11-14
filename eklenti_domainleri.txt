@@ -30,7 +30,7 @@
 |DiziMag:https://dizimag.lol
 |DiziMom:https://www.dizimom.love
 |DiziPal:https://dizipal1217.com
-|DiziPalOrijinal:https://dizipal1512.com
+|DiziPalOrijinal:https://dizipal1511.com
 |Dizist:https://dizist.club
 |DiziWatch:https://diziwatch.tv
 |DiziYo:https://diziyo.is
@@ -86,4 +86,5 @@
 |YeniKaynak:https://www.yenikaynak.com
 |YeniWatch:https://yeniwatch.net.tr
 |Youtube:https://poketube.fun
+
 |YTS:https://wwv.yts-official.mx
