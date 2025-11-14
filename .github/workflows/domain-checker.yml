@@ -26,8 +26,8 @@ jobs:
 
       - name: Domainleri kontrol et ve güncelle
         env:
-          PROXY_HOST: "213.142.156.97"
-          PROXY_PORT: "80"
+          PROXY_HOST: "149.86.146.197"
+          PROXY_PORT: "8080"
         run: |
           python - <<'EOF'
           import re
