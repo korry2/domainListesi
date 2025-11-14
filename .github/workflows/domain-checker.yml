@@ -1,9 +1,9 @@
-name: Domain Kontrol ve Güncelleme
+name: Domain Kontrol (Tor)
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Her saat başı çalışır
-  workflow_dispatch:  # Manuel tetikleme için
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   domain-kontrolu:
@@ -20,27 +20,46 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Tor kurulumu
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tor
+          sudo systemctl start tor
+          sleep 5
+
       - name: Gerekli paketleri yükle
         run: |
-          pip install requests
+          pip install requests[socks] PySocks
 
-      - name: Domainleri kontrol et ve güncelle
+      - name: Domainleri kontrol et
         run: |
           python - <<'EOF'
           import re
           import requests
           from urllib.parse import urlparse
 
-          def get_final_url(url, timeout=10):
-              """URL'nin son redirect edilen halini döndürür"""
+          def get_final_url(url, timeout=15):
+              """Tor üzerinden URL'nin son redirect edilen halini döndürür"""
               try:
                   url = url.strip().rstrip('/')
           
-                  response = requests.get(
-                      url, 
-                      allow_redirects=True, 
+                  # Tor proxy ayarları
+                  proxies = {
+                      'http': 'socks5h://127.0.0.1:9050',
+                      'https': 'socks5h://127.0.0.1:9050'
+                  }
+          
+                  session = requests.Session()
+                  session.proxies.update(proxies)
+          
+                  response = session.get(
+                      url,
+                      allow_redirects=True,
                       timeout=timeout,
-                      headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+                      headers={
+                          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                          'Accept-Language': 'tr-TR,tr;q=0.9'
+                      }
                   )
           
                   final_url = response.url.rstrip('/')
@@ -54,7 +73,7 @@ jobs:
                   return None
 
           def parse_line(line):
-              """Satırı parse eder: |Name:https://domain.com"""
+              """Satırı parse eder"""
               match = re.match(r'\|([^:]+):(https?://[^\s]+)', line.strip())
               if match:
                   name = match.group(1)
@@ -74,7 +93,7 @@ jobs:
           original_content = content
           changes_made = False
 
-          print("Domain kontrolleri başlıyor...\n")
+          print("Domain kontrolleri başlıyor (Tor üzerinden)...\n")
 
           lines = content.split('\n')
           
@@ -106,7 +125,6 @@ jobs:
           
               print()
 
-          # Dosyayı sadece değişiklik varsa güncelle
           if changes_made and content != original_content:
               with open(file_path, 'w', encoding='utf-8') as f:
                   f.write(content)
@@ -116,7 +134,7 @@ jobs:
 
           EOF
 
-      - name: Değişiklikleri kaydet ve yükle
+      - name: Değişiklikleri kaydet
         run: |
           git config --global user.name 'Domain Kontrol Botu'
           git config --global user.email 'bot@github-actions'
@@ -124,10 +142,9 @@ jobs:
           git add eklenti_domainleri.txt
           
           if git diff --staged --quiet; then
-            echo "Değişiklik yok, commit atlanıyor"
+            echo "Değişiklik yok"
           else
             git pull --rebase origin main
-            git commit -m "🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M')"
+            git commit -m "🔄 Domain güncellemesi (Tor) - $(date +'%Y-%m-%d %H:%M')"
             git push
-            echo "✓ Değişiklikler push edildi"
           fi
