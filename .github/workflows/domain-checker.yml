@@ -2,7 +2,7 @@ name: Domain Kontrol ve Güncelleme
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Her saat başı çalışır
+    - cron: '0/45 * * * *'
   workflow_dispatch:  # Manuel tetikleme için
 
 env:
