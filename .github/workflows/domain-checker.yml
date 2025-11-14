@@ -34,7 +34,6 @@ jobs:
           def get_final_url(url, timeout=10):
               """URL'nin son redirect edilen halini döndürür"""
               try:
-                  # Temizle
                   url = url.strip().rstrip('/')
           
                   response = requests.get(
@@ -45,11 +44,7 @@ jobs:
                   )
           
                   final_url = response.url.rstrip('/')
-          
-                  # Parse et ve temiz hale getir
                   parsed = urlparse(final_url)
-          
-                  # Sadece domain ve scheme'i al, path'i temizle
                   clean_url = f"{parsed.scheme}://{parsed.netloc}"
           
                   return clean_url
@@ -67,36 +62,29 @@ jobs:
                   return name, url
               return None, None
 
-          def format_line(name, url):
-              """Satırı formatlar"""
-              return f"|{name}:{url}"
-
-          # Dosyayı oku
           file_path = 'eklenti_domainleri.txt'
           
           try:
               with open(file_path, 'r', encoding='utf-8') as f:
-                  lines = f.readlines()
+                  content = f.read()
           except FileNotFoundError:
               print(f"Dosya bulunamadı: {file_path}")
               exit(1)
 
-          updated_lines = []
+          original_content = content
           changes_made = False
 
           print("Domain kontrolleri başlıyor...\n")
 
-          for line in lines:
-              line = line.strip()
+          lines = content.split('\n')
           
-              if not line or not line.startswith('|'):
-                  updated_lines.append(line)
+          for i, line in enumerate(lines):
+              if not line.strip() or not line.strip().startswith('|'):
                   continue
           
               name, original_url = parse_line(line)
           
               if not name or not original_url:
-                  updated_lines.append(line)
                   continue
           
               print(f"Kontrol ediliyor: {name}")
@@ -105,22 +93,23 @@ jobs:
               final_url = get_final_url(original_url)
           
               if final_url and final_url != original_url:
-                  print(f"  ✓ Yeni URL: {final_url}")
-                  updated_lines.append(format_line(name, final_url))
+                  print(f"  ✓ Yeni URL bulundu: {final_url}")
+                  old_line = line
+                  new_line = f"|{name}:{final_url}"
+                  content = content.replace(old_line, new_line, 1)
                   changes_made = True
               else:
                   if final_url:
                       print(f"  → Değişiklik yok")
                   else:
                       print(f"  ✗ Erişilemedi, mevcut URL korunuyor")
-                  updated_lines.append(format_line(name, original_url))
           
               print()
 
-          # Dosyayı güncelle
-          if changes_made:
+          # Dosyayı sadece değişiklik varsa güncelle
+          if changes_made and content != original_content:
               with open(file_path, 'w', encoding='utf-8') as f:
-                  f.write('\n'.join(updated_lines) + '\n')
+                  f.write(content)
               print("✓ Dosya güncellendi!")
           else:
               print("→ Güncelleme gerekmedi.")
@@ -137,6 +126,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "Değişiklik yok, commit atlanıyor"
           else
+            git pull --rebase origin main
             git commit -m "🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M')"
             git push
             echo "✓ Değişiklikler push edildi"
