@@ -1,0 +1,143 @@
+name: Domain Kontrol ve Güncelleme
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Her saat başı çalışır
+  workflow_dispatch:  # Manuel tetikleme için
+
+jobs:
+  domain-kontrolu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Depoyu klonla
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Python kurulumu
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Gerekli paketleri yükle
+        run: |
+          pip install requests
+
+      - name: Domainleri kontrol et ve güncelle
+        run: |
+          python - <<'EOF'
+          import re
+          import requests
+          from urllib.parse import urlparse
+
+          def get_final_url(url, timeout=10):
+              """URL'nin son redirect edilen halini döndürür"""
+              try:
+                  # Temizle
+                  url = url.strip().rstrip('/')
+          
+                  response = requests.get(
+                      url, 
+                      allow_redirects=True, 
+                      timeout=timeout,
+                      headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+                  )
+          
+                  final_url = response.url.rstrip('/')
+          
+                  # Parse et ve temiz hale getir
+                  parsed = urlparse(final_url)
+          
+                  # Sadece domain ve scheme'i al, path'i temizle
+                  clean_url = f"{parsed.scheme}://{parsed.netloc}"
+          
+                  return clean_url
+          
+              except Exception as e:
+                  print(f"Hata ({url}): {str(e)}")
+                  return None
+
+          def parse_line(line):
+              """Satırı parse eder: |Name:https://domain.com"""
+              match = re.match(r'\|([^:]+):(https?://[^\s]+)', line.strip())
+              if match:
+                  name = match.group(1)
+                  url = match.group(2).rstrip('/')
+                  return name, url
+              return None, None
+
+          def format_line(name, url):
+              """Satırı formatlar"""
+              return f"|{name}:{url}"
+
+          # Dosyayı oku
+          file_path = 'eklenti_domainleri.txt'
+          
+          try:
+              with open(file_path, 'r', encoding='utf-8') as f:
+                  lines = f.readlines()
+          except FileNotFoundError:
+              print(f"Dosya bulunamadı: {file_path}")
+              exit(1)
+
+          updated_lines = []
+          changes_made = False
+
+          print("Domain kontrolleri başlıyor...\n")
+
+          for line in lines:
+              line = line.strip()
+          
+              if not line or not line.startswith('|'):
+                  updated_lines.append(line)
+                  continue
+          
+              name, original_url = parse_line(line)
+          
+              if not name or not original_url:
+                  updated_lines.append(line)
+                  continue
+          
+              print(f"Kontrol ediliyor: {name}")
+              print(f"  Mevcut URL: {original_url}")
+          
+              final_url = get_final_url(original_url)
+          
+              if final_url and final_url != original_url:
+                  print(f"  ✓ Yeni URL: {final_url}")
+                  updated_lines.append(format_line(name, final_url))
+                  changes_made = True
+              else:
+                  if final_url:
+                      print(f"  → Değişiklik yok")
+                  else:
+                      print(f"  ✗ Erişilemedi, mevcut URL korunuyor")
+                  updated_lines.append(format_line(name, original_url))
+          
+              print()
+
+          # Dosyayı güncelle
+          if changes_made:
+              with open(file_path, 'w', encoding='utf-8') as f:
+                  f.write('\n'.join(updated_lines) + '\n')
+              print("✓ Dosya güncellendi!")
+          else:
+              print("→ Güncelleme gerekmedi.")
+
+          EOF
+
+      - name: Değişiklikleri kaydet ve yükle
+        run: |
+          git config --global user.name 'Domain Kontrol Botu'
+          git config --global user.email 'bot@github-actions'
+          
+          git add eklenti_domainleri.txt
+          
+          if git diff --staged --quiet; then
+            echo "Değişiklik yok, commit atlanıyor"
+          else
+            git commit -m "🔄 Domain güncellemesi - $(date +'%Y-%m-%d %H:%M')"
+            git push
+            echo "✓ Değişiklikler push edildi"
+          fi
