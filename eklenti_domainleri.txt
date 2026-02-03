@@ -11,7 +11,6 @@
 |Sinefy:https://sinefy3.com
 |SinemaCX:https://www.sinema.live
 |Sinezy:https://sinezy.ink
-|SuperFilmGeldi:https://www.superfilmgeldi13.art
 |UgurFilm:https://ugurfilm3.xyz
 |Animecix:https://animecix.tv
 |AnimeElysium:https://animely.app
@@ -79,9 +78,15 @@
 |Trt1:https://www.trt1.com.tr
 |TrtCocuk:https://www.trtcocuk.net.tr
 |Tv8:https://www.tv8.com.tr
+|WebteIzle:https://webteizle3.xyz
 |TvDiziler:https://tvdiziler.tv
 |YabanciDizi:https://yabancidizi.so
 |YeniKaynak:https://www.yenikaynak.com
 |YeniWatch:https://yeniwatch.net.tr
 |YesilCamTv:https://yesilcamtv.com.tr
 |YTS:https://yts.bz
+|Turkanime:https://www.turkanime.co
+|WebDramaTurkey:https://webdramaturkey2.com
+|Watch2Movies:https://watch2movies.net
+|HDFilmDelisi:https://hdfilmdelisi.one
+|SineWix:https://ydfvfdizipanel.ru
