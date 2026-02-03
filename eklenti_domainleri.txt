@@ -78,14 +78,14 @@
 |Trt1:https://www.trt1.com.tr
 |TrtCocuk:https://www.trtcocuk.net.tr
 |Tv8:https://www.tv8.com.tr
-|WebteIzle:https://webteizle3.xyz
+|WebteIzle:https://webteizle.info
 |TvDiziler:https://tvdiziler.tv
 |YabanciDizi:https://yabancidizi.so
 |YeniKaynak:https://www.yenikaynak.com
 |YeniWatch:https://yeniwatch.net.tr
 |YesilCamTv:https://yesilcamtv.com.tr
 |YTS:https://yts.bz
-|Turkanime:https://www.turkanime.co
+|Turkanime:https://www.turkanime.tv
 |WebDramaTurkey:https://webdramaturkey2.com
 |Watch2Movies:https://watch2movies.net
 |HDFilmDelisi:https://hdfilmdelisi.one
