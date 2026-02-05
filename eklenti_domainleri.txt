@@ -1,12 +1,13 @@
 |Turkanime:https://www.turkanime.tv
-|FullHDFilmizlesene:[suspicious link removed]
+|FullHDFilmizlesene:https://www.fullhdfilmizlesene.tv
 |FilmMakinesi:https://filmmakinesi.to
 |Dizilla:https://dizilla.to
 |DiziGom:https://dizigom104.com
 |FilmModu:https://www.filmmodu.ws
 |DiziPalOrijinal:https://dizipal1536.com
 |HDFilmCehennemi:https://www.hdfilmcehennemi.nl
-|Anizm:https://anizm.net |Animecix:https://animecix.tv
+|Anizm:https://anizm.net
+|Animecix:https://animecix.tv
 |KoreanTurk:https://www.koreanturk.net
 |Asyafanatiklerim:https://asyafanatiklerim.com
 |DiziWatch:https://diziwatch.to
@@ -18,7 +19,7 @@
 |Anizium:https://api.anizium.co
 |Sinefy:https://sinefy3.com
 |Dizist:https://dizist.live
-|DiziYo:[suspicious link removed]
+|DiziYo:https://diziyo.sh
 |FilmEkseni:https://filmekseni.cc
 |Sinezy:https://sinezy.ink
 |UgurFilm:https://ugurfilm3.xyz
@@ -31,7 +32,7 @@
 |DiziMag:https://dizimag.nl
 |TrAnimeIzle:https://www.tranimeizle.io
 |Animeizlesene:https:/www.animeizlesene.com
-|Animeler:[suspicious link removed]
+|Animeler:https://animeler.pw
 |AsyaWatch:https://asyawatch.com
 |DiziAsia:https://diziasia.com
 |AsyaKing:https://www.asyaking.pro
@@ -58,9 +59,9 @@
 |Dizican:https://dizican.tv
 |DiziLife:https://dizi39.life
 |DiziYou:https://www.diziyou.one
-|YeniWatch:[suspicious link removed]
+|YeniWatch:https://yeniwatch.net.tr
 |YeniKaynak:https://www.yenikaynak.com
-|Watch2Movies:[suspicious link removed]
+|Watch2Movies:https://watch2movies.net
 |Ddizi:https://www.ddizi.im
 |TrDiziIzle:https://www.trdiziizle.tv
 |TvDiziler:https://tvdiziler.tv
@@ -70,7 +71,7 @@
 |MoviesMod:https://moviesmod.kids
 |4kHdHub:https://4khdhub.dad
 |HDHUB4u:https://new3.hdhub4u.fo
-|FlixHQ:[suspicious link removed]
+|FlixHQ:https://flixhq.to
 |SeiCode:https://seicode.net
 |SelcukFlix:https://selcukflix.net
 |YesilCamTv:https://yesilcamtv.com.tr
