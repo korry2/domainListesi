@@ -26,7 +26,7 @@
 |SinemaCX:https://www.sinema.news
 |HDFilmDelisi:https://hdfilmdelisi.one
 |SetFilmIzle:https://www.setfilmizle.uk
-|DiziPal:https://dizipal.uk
+|DiziPal:https://dizipal.cx
 |RoketDizi:https://flatscher.net
 |DiziMom:https://www.dizimom.art
 |DiziMag:https://dizimag.nl
