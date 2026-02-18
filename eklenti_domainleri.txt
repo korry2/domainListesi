@@ -26,7 +26,7 @@
 |SinemaCX:https://www.sinema.news
 |HDFilmDelisi:https://hdfilmdelisi.one
 |SetFilmIzle:https://www.setfilmizle.uk
-|DiziPal:https://dizipal.cx
+|DiziPal:https://dizipal.bar
 |RoketDizi:https://flatscher.net
 |DiziMom:https://www.dizimom.art
 |DiziMag:https://dizimag.nl
@@ -57,7 +57,7 @@
 |FilmIzle:https://filmizle.bio
 |FullHDIzle:https://fullhdizle.one
 |Dizican:https://dizican.tv
-|DiziLife:https://dizi41.life
+|DiziLife:https://dizi42.life
 |DiziYou:https://www.diziyou.one
 |YeniWatch:https://yeniwatch.net.tr
 |YeniKaynak:https://www.yenikaynak.com
