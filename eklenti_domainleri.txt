@@ -23,7 +23,7 @@
 |FilmEkseni:https://filmekseni.cc
 |Sinezy:https://sinezy.info
 |UgurFilm:https://ugurfilm3.xyz
-|SinemaCX:https://www.sinema.news
+|SinemaCX:https://www.sinema.info
 |HDFilmDelisi:https://hdfilmdelisi.one
 |SetFilmIzle:https://www.setfilmizle.uk
 |DiziPal:https://dizipal.bar
