@@ -70,7 +70,7 @@
 |VegaMovies:https://vegamovies.cologne
 |MoviesMod:https://moviesmod.kids
 |4kHdHub:https://4khdhub.dad
-|HDHUB4u:https://new3.hdhub4u.fo
+|HDHUB4u:https://new4.hdhub4u.fo
 |FlixHQ:https://flixhq.to
 |SeiCode:https://seicode.net
 |SelcukFlix:https://selcukflix.net
