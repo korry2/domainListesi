@@ -52,7 +52,7 @@
 |KultFilmler:https://kultfilmler.net
 |RareFilmm:https://rarefilmm.com
 |FilmKutu:https://filmkutu.org
-|FilmHane:https://filmhane.fit
+|FilmHane:https://www.filmhane.ink
 |Filmzal:https://filmzal.me
 |FilmIzle:https://filmizle.bio
 |FullHDIzle:https://fullhdizle.one
