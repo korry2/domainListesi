@@ -28,7 +28,7 @@
 |SetFilmIzle:https://www.setfilmizle.uk
 |DiziPal:https://dizipal.bar
 |RoketDizi:https://flatscher.net
-|DiziMom:https://www.dizimom.uno
+|DiziMom:https://www.dizimom.best
 |DiziMag:https://dizimag.nl
 |TrAnimeIzle:https://www.tranimeizle.io
 |Animeizlesene:https:/www.animeizlesene.com
