@@ -66,7 +66,7 @@
 |TrDiziIzle:https://www.trdiziizle.tv
 |TvDiziler:https://tvdiziler.tv
 |BelgeselX:https://belgeselx.com
-|YTS:https://yts.gg
+|YTS:https://www.yts.gg
 |VegaMovies:https://new1.vegamovies.futbol
 |MoviesMod:https://moviesmod.kids
 |4kHdHub:https://4khdhub.dad
