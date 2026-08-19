@@ -73,7 +73,7 @@
 |HDHUB4u:https://new1.hdhub4u.af
 |FlixHQ:https://flixhq.to
 |SeiCode:https://seicode.net
-|SelcukFlix:https://selcukflix.net
+|SelcukFlix:https://selcukflix.co
 |YesilCamTv:https://yesilcamtv.com.tr
 |Trt1:https://www.trt1.com.tr
 |KanalD:https://www.kanald.com.tr
