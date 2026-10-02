@@ -48,7 +48,7 @@
 |AnimeElysium:https://animely.app
 |TRAnimaci:https://tranimaci.com
 |CizgiMax:https://cizgimax.online
-|CizgiveDizi:https://cizgivedizi.com
+|CizgiveDizi:https://cizgivedizi.net
 |KultFilmler:https://kultfilmler.net
 |RareFilmm:https://rarefilmm.com
 |FilmKutu:https://filmkutu.org
