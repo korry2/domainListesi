@@ -62,7 +62,7 @@
 |YeniWatch:https://yeniwatch.net.tr
 |YeniKaynak:https://www.yenikaynak.com
 |Watch2Movies:https://watch2movies.net
-|Ddizi:https://www.ddizi.im
+|Ddizi:https://www.ddizi.tel
 |TrDiziIzle:https://www.trdiziizle.tv
 |TvDiziler:https://tvdiziler.tv
 |BelgeselX:https://belgeselx.com
