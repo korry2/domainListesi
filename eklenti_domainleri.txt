@@ -21,7 +21,7 @@
 |Dizist:https://dizist.live
 |DiziYo:https://diziyo.sh
 |FilmEkseni:https://filmekseni.vip
-|Sinezy:https://sinezy.to
+|Sinezy:https://sinezy.si
 |UgurFilm:https://ugurfilm3.xyz
 |SinemaCX:https://sinemacc.com
 |HDFilmDelisi:https://hdfilmdelisi.one
