@@ -40,7 +40,7 @@
 |DiziKorea:https://dizikorea3.com
 |WebDramaTurkey:https://webdramaturkey2.com
 |BirAsyaDizi:https://www.birasyadizi.cx
-|HintDizi:https://hintdizi.com
+|HintDizi:https://hintdizi.com:443
 |Asyafilmizlesene:https://asyafilmizlesene.org
 |Asyaanimeleri:https://asyaanimeleri.top
 |OnePaceTr:https://www.onepacetr.net
